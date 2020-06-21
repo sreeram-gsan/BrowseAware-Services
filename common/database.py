@@ -20,3 +20,7 @@ class Database(object):
     @staticmethod
     def find_one(collection,data):        
         return Database.DATABASE[collection].find_one(data)
+    
+    @staticmethod
+    def update(collection,filter_condition,data):
+        return Database.DATABASE[collection].update(filter_condition,data)
