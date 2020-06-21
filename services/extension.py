@@ -72,7 +72,7 @@ def record_user_feedback(feedback):
 
         try:
             data = {
-                    "id" : session['username_session'],
+                    "id" : session['username'],
                     "status":feedback,
                     "date": current_date,
                     "time": current_time
@@ -191,7 +191,7 @@ def session_number():
 def push_url():
     logging.info("Enter push_url")   
     try:
-        un = session['username_session']
+        un = session['username']
     except KeyError:        
         un = None
         logging.debug("User hasn't logged in")
@@ -267,7 +267,7 @@ def push_url():
             enqueue_url(url,category,url_queue,category_queue,url_cache,un)
 
         try:
-            post = {"id" : session['username_session'],
+            post = {"id" : session['username'],
                     "url": url,
                     "date": current_date,
                     "time": current_time,
@@ -311,16 +311,16 @@ def nudge_feedback(user_feedback):
 def get_nudge_status():
     logging.info("Enter get_nudge_status")   
     try:
-        un = session['username_session']
+        un = session['username']
         if (un != None):      
-            user_cache = Database.find_one("cache",{"session": { "$gt": 0 },"username":str(session['username_session'])})        
+            user_cache = Database.find_one("cache",{"session": { "$gt": 0 },"username":str(session['username'])})        
             session_start_time = user_cache["session_start_time"]
             session_duration = (datetime.now() - session_start_time).total_seconds() / 60.0 #Session duration in minutes
             logging.debug("Session Duration: " + str(session_duration))
 
             if ( session_duration >= nudge_config['MINIMUM_TIME_TO_NUDGE']):
                 current_session = user_cache["session"]
-                nudge_status_result = Database.find_one("nudge_status",{ "username" : str(session['username_session']),"session":current_session})        
+                nudge_status_result = Database.find_one("nudge_status",{ "username" : str(session['username']),"session":current_session})        
 
                 if (nudge_status_result != None and nudge_status_result["below_threshold"] > 0):
                     reset_nudge_status(un,current_session)
