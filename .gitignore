@@ -1,1 +1,3 @@
-ChromeExtensionService/venv
+venv
+__pycache__
+*.log
